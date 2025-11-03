@@ -2,6 +2,7 @@ import express from 'express';
 import { groq } from '@ai-sdk/groq';
 import { streamText } from 'ai';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -52,6 +53,9 @@ const SYSTEM_MESSAGE = {
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+  origin: "https://tu-frontend.onrender.com"
+}));
 
 app.post('/llmProxy', async (req, res) => {
   try {
