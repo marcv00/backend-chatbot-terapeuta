@@ -1,0 +1,24 @@
+### Generar título para conversación
+POST http://localhost:3000/generate-title
+Content-Type: application/json
+
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hola Dra. Ava, últimamente me siento muy ansioso y no sé cómo manejarlo"
+    },
+    {
+      "role": "assistant",
+      "content": "Uf, entiendo que es una carga pesada. Vamos a explorar algunas estrategias..."
+    },
+    {
+      "role": "user",
+      "content": "Gracias, he intentado respirar profundo pero sigue difícil"
+    },
+    {
+      "role": "assistant",
+      "content": "Es totalmente comprensible. A veces necesitamos pasos pequeños y concretos..."
+    }
+  ]
+}

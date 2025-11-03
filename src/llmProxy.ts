@@ -1,6 +1,6 @@
 import express from 'express';
 import { groq } from '@ai-sdk/groq';
-import { streamText } from 'ai';
+import { streamText, ModelMessage } from 'ai';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
@@ -48,7 +48,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type"]
 }));
 
-app.post('/llmProxy', async (req, res) => {
+app.post('', async (req, res) => {
   try {
     const { messages } = req.body;
 
@@ -73,6 +73,49 @@ app.post('/llmProxy', async (req, res) => {
     res.status(500).json({ error: 'Error procesando la solicitud' });
   }
 });
+
+// Nuevo endpoint en el mismo app.ts
+app.post('/generate-title', async (req, res) => {
+  try {
+    const { messages } = req.body;
+
+    if (!Array.isArray(messages) || messages.length < 4) {
+      return res.status(400).json({ error: '"messages" debe ser un array con al menos 4 elementos (2 inputs + 2 respuestas)' });
+    }
+
+    // Concatenamos los mensajes en un string para que el LLM entienda el contexto
+    const conversationSnippet = messages
+      .map((m: any, i: number) => `${m.role === 'user' ? 'Usuario' : 'Dra. Ava'}: ${m.content}`)
+      .join('\n');
+
+    // Prompt para generar título
+    const promptMessage: ModelMessage = {
+      role: 'system',
+      content: `
+        Eres un asistente que genera títulos cortos y descriptivos para conversaciones de chat.
+        Dado el siguiente extracto de conversación, genera un título de máximo 5 palabras que resuma de manera precisa el tema principal. Solo devuelve el título sin explicaciones.
+        Conversación:
+        ${conversationSnippet}
+      `
+    };
+
+    const result = await streamText({
+      model: groq('llama-3.1-8b-instant'),
+      messages: [promptMessage],
+    });
+
+    let title = '';
+    for await (const chunk of result.textStream) {
+      title += chunk;
+    }
+
+    res.json({ title: title.trim() });
+  } catch (err) {
+    console.error('Generate Title Error:', err);
+    res.status(500).json({ error: 'Error generando título' });
+  }
+});
+
 
 // Puerto dinámico para Render
 const PORT = process.env.PORT || 3000;
