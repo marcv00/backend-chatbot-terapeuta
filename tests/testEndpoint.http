@@ -1,0 +1,11 @@
+POST http://localhost:3000/llmProxy
+Content-Type: application/json
+
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hola Dra. Ava, últimamente me siento muy ansioso y no sé cómo manejarlo"
+    }
+  ]
+}

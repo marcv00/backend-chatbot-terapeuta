@@ -1,0 +1,27 @@
+{
+  "name": "backend-chatbot-terapeuta",
+  "version": "1.0.0",
+  "description": "Backend para chatbot terapeuta Dra. Ava",
+  "main": "dist/llmProxy.js",
+  "scripts": {
+    "dev": "node --loader ts-node/esm src/llmProxy.ts",
+    "build": "tsc",
+    "start": "node dist/llmProxy.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/groq": "^2.0.27",
+    "ai": "^5.0.86",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
